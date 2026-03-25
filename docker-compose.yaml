@@ -7,7 +7,7 @@ services:
       POSTGRES_PASSWORD: password123
       POSTGRES_DB: gamevault_db
     ports:
-      - "5432:5432"
+      - "5433:5432" # Por si hubiera instalado PostgreSQL localmente, para evitar conflictos
     volumes:
       - pgdata:/var/lib/postgresql/data
 
