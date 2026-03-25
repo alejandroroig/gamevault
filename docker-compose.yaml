@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   postgres:
     image: postgres:18-alpine
@@ -7,17 +6,17 @@ services:
       POSTGRES_PASSWORD: password123
       POSTGRES_DB: gamevault_db
     ports:
-      - "5433:5432" # Por si hubiera instalado PostgreSQL localmente, para evitar conflictos
+      - "5444:5432" # Mapeo modificado para evitar conflictos con instalaciones locales
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - gv_pgdata:/var/lib/postgresql/data
 
   mongodb:
     image: mongo:8.0
     ports:
-      - "27017:27017"
+      - "27018:27017" # Puerto alternativo
     volumes:
-      - mongodata:/data/db
+      - gv_mongodata:/data/db
 
 volumes:
-  pgdata:
-  mongodata:
+  gv_pgdata:
+  gv_mongodata:
