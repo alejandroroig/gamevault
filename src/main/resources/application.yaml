@@ -5,3 +5,7 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+    properties:
+      hibernate:
+        type:
+          json_format_mapper: com.aleroig.gamevault.config.Jackson3HibernateMapper

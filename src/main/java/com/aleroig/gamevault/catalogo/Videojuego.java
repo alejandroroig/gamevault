@@ -2,8 +2,11 @@ package com.aleroig.gamevault.catalogo;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 @Entity
 @Table(name = "videojuego")
@@ -20,5 +23,9 @@ public class Videojuego {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "estudio_id", nullable = false)
     private Estudio estudio;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    private Map<String, Object> detallesPlataforma;
 }
 
