@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class GamevaultApplication {
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         SpringApplication.run(GamevaultApplication.class, args);
     }
 

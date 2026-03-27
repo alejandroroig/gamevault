@@ -1,0 +1,32 @@
+{
+  "estudios": [
+    {
+      "nombre": "Team Cherry",
+      "pais": "Australia"
+    },
+    {
+      "nombre": "Nintendo",
+      "pais": "Japón"
+    }
+  ],
+  "videojuegos": [
+    {
+      "titulo": "Hollow Knight",
+      "precio": 14.99,
+      "fechaLanzamiento": "2017-02-24",
+      "estudioId": 1,
+      "detallesPlataforma": {
+        "pc": { "ram_minima": "4GB", "gpu": "GTX 980" }
+      }
+    },
+    {
+      "titulo": "The Legend of Zelda: Breath of the Wild",
+      "precio": 59.99,
+      "fechaLanzamiento": "2017-03-03",
+      "estudioId": 2,
+      "detallesPlataforma": {
+        "switch": { "resolucion": "900p", "fps": 30 }
+      }
+    }
+  ]
+}

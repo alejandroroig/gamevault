@@ -2,6 +2,7 @@ package com.aleroig.gamevault.catalogo;
 
 import com.aleroig.gamevault.catalogo.dto.VideojuegoCreateDTO;
 import com.aleroig.gamevault.catalogo.dto.VideojuegoResponseDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,12 +27,12 @@ public class VideeojuegoController {
     }
 
     @PostMapping
-    public ResponseEntity<VideojuegoResponseDTO> create(@RequestBody VideojuegoCreateDTO dto) {
+    public ResponseEntity<VideojuegoResponseDTO> create(@Valid @RequestBody VideojuegoCreateDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(videojuegoService.create(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<VideojuegoResponseDTO> update(@PathVariable Long id, @RequestBody VideojuegoCreateDTO dto) {
+    public ResponseEntity<VideojuegoResponseDTO> update(@PathVariable Long id, @Valid @RequestBody VideojuegoCreateDTO dto) {
         return ResponseEntity.ok(videojuegoService.update(id, dto));
     }
 }
