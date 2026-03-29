@@ -3,11 +3,14 @@ package com.aleroig.gamevault.config;
 import org.hibernate.type.descriptor.WrapperOptions;
 import org.hibernate.type.descriptor.java.JavaType;
 import org.hibernate.type.format.FormatMapper;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 public class Jackson3HibernateMapper implements FormatMapper {
     // Instanciamos el nuevo Jackson 3
-    private final ObjectMapper mapper = new ObjectMapper();
+    // Jackson 3: Usamos JsonMapper con el Patrón Builder
+    private final JsonMapper mapper = JsonMapper.builder()
+            .findAndAddModules() // ¡Añade soporte para LocalDate automáticamente!
+            .build();
 
     @Override
     public <T> T fromString(CharSequence string, JavaType<T> javaType, WrapperOptions wrapperOptions) {
