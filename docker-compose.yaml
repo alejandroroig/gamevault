@@ -17,6 +17,12 @@ services:
     volumes:
       - gv_mongodata:/data/db
 
+  redis:
+    image: redis:8-alpine
+    ports:
+      - "6379:6379"
+
+
 volumes:
   gv_pgdata:
   gv_mongodata:

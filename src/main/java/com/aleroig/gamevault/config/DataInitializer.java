@@ -6,7 +6,10 @@ import com.aleroig.gamevault.catalogo.VideojuegoRepository;
 import com.aleroig.gamevault.catalogo.VideojuegoService;
 import com.aleroig.gamevault.catalogo.dto.EstudioDTO;
 import com.aleroig.gamevault.catalogo.dto.VideojuegoCreateDTO;
+import com.aleroig.gamevault.catalogo.dto.VideojuegoResponseDTO;
 import com.aleroig.gamevault.reviews.ReviewRepository;
+import com.aleroig.gamevault.reviews.ReviewService;
+import com.aleroig.gamevault.reviews.dto.ReviewCreateDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -28,30 +31,23 @@ public class DataInitializer implements CommandLineRunner {
 
     private final EstudioService estudioService;
     private final VideojuegoService videojuegoService;
+    private final ReviewService reviewService;
 
-    private record SeedData(List<EstudioDTO> estudios, List<VideojuegoCreateDTO> videojuegos) {
-    }
+    private record SeedData(List<EstudioDTO> estudios, List<VideojuegoCreateDTO> videojuegos, List<ReviewCreateDTO> reviews) {}
 
     @Override
     public void run(String... args) throws Exception {
-        log.info("Limpiando bases de datos para garantizar un estado predecible...");
-        // El orden de borrado es vital: Primero los "hijos" y luego los "padres"
-        reviewRepository.deleteAll(); // Borra Mongo
-        videojuegoRepository.deleteAll(); // Borra Postgres (Hijo)
-        estudioRepository.deleteAll(); // Borra Postgres (Padre)
+        log.info("Limpiando bases de datos...");
+        reviewRepository.deleteAll();
+        videojuegoRepository.deleteAll();
+        estudioRepository.deleteAll();
 
-        log.info("Iniciando el sembrado de datos (Data Seeding)...");
-
-        // Jackson 3: Creamos el JsonMapper con soporte de fechas
-        JsonMapper mapper = JsonMapper.builder()
-                .findAndAddModules()
-                .build();
+        log.info("Iniciando el sembrado de datos (Postgres + Mongo)...");
+        JsonMapper mapper = JsonMapper.builder().findAndAddModules().build();
 
         try (InputStream inputStream = getClass().getResourceAsStream("/datos_iniciales.json")) {
-            SeedData data = mapper.readValue(inputStream, new TypeReference<SeedData>() {
-            });
+            SeedData data = mapper.readValue(inputStream, new TypeReference<SeedData>() {});
 
-            // 1. Guardamos los estudios y almacenamos el resultado para saber sus IDs reales
             List<EstudioDTO> estudiosGuardados = new java.util.ArrayList<>();
             if (data.estudios() != null) {
                 for (EstudioDTO estudio : data.estudios()) {
@@ -59,30 +55,31 @@ public class DataInitializer implements CommandLineRunner {
                 }
             }
 
-            // 2. Insertamos los juegos usando el ID real de la base de datos
+            List<VideojuegoResponseDTO> juegosGuardados = new java.util.ArrayList<>();
             if (data.videojuegos() != null && !estudiosGuardados.isEmpty()) {
                 for (VideojuegoCreateDTO juego : data.videojuegos()) {
-
-                    // El JSON dice "estudioId: 1". Le restamos 1 para coger la posición 0 de la lista.
-                    int indiceReal = (int) (juego.estudioId() - 1);
-                    Long idRealDeLaBD = estudiosGuardados.get(indiceReal).id();
-
-                    // Como los records son inmutables, creamos uno nuevo con el ID corregido
+                    Long idEstudioReal = estudiosGuardados.get((int) (juego.estudioId() - 1)).id();
                     VideojuegoCreateDTO juegoCorregido = new VideojuegoCreateDTO(
-                            juego.titulo(),
-                            juego.precio(),
-                            juego.fechaLanzamiento(),
-                            idRealDeLaBD, // <-- ¡Aquí inyectamos la magia!
-                            juego.detallesPlataforma()
+                            juego.titulo(), juego.precio(), juego.fechaLanzamiento(),
+                            idEstudioReal, juego.detallesPlataforma()
                     );
-
-                    videojuegoService.create(juegoCorregido);
+                    juegosGuardados.add(videojuegoService.create(juegoCorregido));
                 }
             }
 
+            // Puente políglota: Usamos el ID real de Postgres para guardar en Mongo
+            if (data.reviews() != null && !juegosGuardados.isEmpty()) {
+                for (ReviewCreateDTO review : data.reviews()) {
+                    Long idJuegoReal = juegosGuardados.get((int) (review.videojuegoId() - 1)).id();
+                    ReviewCreateDTO reviewCorregida = new ReviewCreateDTO(
+                            idJuegoReal, review.autor(), review.puntuacion(), review.comentario()
+                    );
+                    reviewService.create(reviewCorregida);
+                }
+            }
             log.info("¡Datos inyectados correctamente!");
         } catch (Exception e) {
-            log.error("Error al inyectar los datos iniciales: {}", e.getMessage(), e);
+            log.error("Error al inyectar datos: {}", e.getMessage(), e);
         }
     }
 }

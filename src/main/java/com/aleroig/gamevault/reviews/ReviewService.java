@@ -46,7 +46,7 @@ public class ReviewService {
         return mapToDTO(saved);
     }
 
-    // Método auxiliar de mapeo manual
+    // Metodo auxiliar de mapeo manual
     private ReviewResponseDTO mapToDTO(Review r) {
         return new ReviewResponseDTO(r.getId(), r.getVideojuegoId(), r.getAutor(), r.getPuntuacion(), r.getComentario());
     }

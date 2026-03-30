@@ -1,32 +1,24 @@
 {
   "estudios": [
-    {
-      "nombre": "Team Cherry",
-      "pais": "Australia"
-    },
-    {
-      "nombre": "Nintendo",
-      "pais": "Japón"
-    }
+    { "nombre": "Team Cherry", "pais": "Australia" },
+    { "nombre": "Nintendo", "pais": "Japón" },
+    { "nombre": "FromSoftware", "pais": "Japón" },
+    { "nombre": "Naughty Dog", "pais": "EEUU" }
   ],
   "videojuegos": [
-    {
-      "titulo": "Hollow Knight",
-      "precio": 14.99,
-      "fechaLanzamiento": "2017-02-24",
-      "estudioId": 1,
-      "detallesPlataforma": {
-        "pc": { "ram_minima": "4GB", "gpu": "GTX 980" }
-      }
-    },
-    {
-      "titulo": "The Legend of Zelda: Breath of the Wild",
-      "precio": 59.99,
-      "fechaLanzamiento": "2017-03-03",
-      "estudioId": 2,
-      "detallesPlataforma": {
-        "switch": { "resolucion": "900p", "fps": 30 }
-      }
-    }
+    { "titulo": "Hollow Knight", "precio": 14.99, "fechaLanzamiento": "2017-02-24", "estudioId": 1, "detallesPlataforma": { "pc": { "ram": "4GB" } } },
+    { "titulo": "Silksong", "precio": 29.99, "fechaLanzamiento": "2025-01-01", "estudioId": 1, "detallesPlataforma": {} },
+    { "titulo": "Zelda: Breath of the Wild", "precio": 59.99, "fechaLanzamiento": "2017-03-03", "estudioId": 2, "detallesPlataforma": { "switch": { "fps": 30 } } },
+    { "titulo": "Super Mario Odyssey", "precio": 49.99, "fechaLanzamiento": "2017-10-27", "estudioId": 2, "detallesPlataforma": {} },
+    { "titulo": "Elden Ring", "precio": 59.99, "fechaLanzamiento": "2022-02-25", "estudioId": 3, "detallesPlataforma": { "pc": { "ram": "16GB" } } },
+    { "titulo": "Dark Souls III", "precio": 39.99, "fechaLanzamiento": "2016-03-24", "estudioId": 3, "detallesPlataforma": {} },
+    { "titulo": "The Last of Us Part I", "precio": 69.99, "fechaLanzamiento": "2022-09-02", "estudioId": 4, "detallesPlataforma": {} }
+  ],
+  "reviews": [
+    { "videojuegoId": 1, "autor": "GamerPro", "puntuacion": 10, "comentario": "Obra maestra absoluta." },
+    { "videojuegoId": 1, "autor": "NoobMaster", "puntuacion": 9, "comentario": "Difícil pero justo." },
+    { "videojuegoId": 3, "autor": "Zeldera", "puntuacion": 10, "comentario": "Revolucionó el mundo abierto." },
+    { "videojuegoId": 3, "autor": "Hater99", "puntuacion": 5, "comentario": "Las armas se rompen, no me gusta." },
+    { "videojuegoId": 5, "autor": "GitGud", "puntuacion": 10, "comentario": "GOTY indudable." }
   ]
 }
