@@ -1,0 +1,16 @@
+{
+  "name": "GameVault Dev Container",
+  "image": "mcr.microsoft.com/devcontainers/base:debian-12",
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "25",
+      "jdkDistro": "tem",
+      "installMaven": false
+    },
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "remoteUser": "vscode",
+  "forwardPorts": [8080, 5444, 27018, 6379],
+  "postCreateCommand": "chmod +x mvnw && ./mvnw -v"
+}
