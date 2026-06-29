@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.PositiveOrZero;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Map;
 
@@ -14,7 +15,7 @@ public record VideojuegoCreateDTO(
 
         @NotNull(message = "El precio es obligatorio")
         @PositiveOrZero(message = "El precio no puede ser negativo")
-        Double precio,
+        BigDecimal precio,
 
         @PastOrPresent(message = "La fecha de lanzamiento no puede ser futura")
         LocalDate fechaLanzamiento,
