@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/videojuegos")
 @RequiredArgsConstructor
-public class VideeojuegoController {
+public class VideojuegoController {
     private final VideojuegoService videojuegoService;
 
     @GetMapping
