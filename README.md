@@ -23,3 +23,9 @@ La rama estable del proyecto es master.
 ## Estado base
 
 El punto de partida del laboratorio está marcado con el tag `v0.0-base`.
+
+## Documentación
+
+- [Flujo de trabajo con Git y GitHub](docs/00-flujo-git-github.md)
+- [Estado inicial de GameVault](docs/01-estado-inicial-gamevault.md)
+- [Dev Container de GameVault](docs/02-devcontainer.md)
