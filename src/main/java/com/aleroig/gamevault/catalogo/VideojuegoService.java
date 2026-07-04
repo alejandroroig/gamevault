@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class VideojuegoService {
     private final VideojuegoRepository videojuegoRepository;
     private final EstudioRepository estudioRepository;
 
+    @Transactional(readOnly = true)
     public List<VideojuegoResponseDTO> findAll() {
         return videojuegoRepository.findAll()
                 .stream()
@@ -28,18 +30,21 @@ public class VideojuegoService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public Page<VideojuegoResponseDTO> findAllPaginated(Pageable pageable) {
         // El repositorio ya sabe cómo paginar si le pasamos el objeto pageable
         return videojuegoRepository.findAll(pageable)
                 .map(this::mapToDTO);
     }
 
+    @Transactional(readOnly = true)
     public VideojuegoResponseDTO findById(Long id) {
         return videojuegoRepository.findById(id)
                 .map(this::mapToDTO)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Videojuego no encontrado"));
     }
 
+    @Transactional
     public VideojuegoResponseDTO create(VideojuegoCreateDTO dto) {
         Estudio estudio = estudioRepository.findById(dto.estudioId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Estudio no encontrado"));
@@ -73,6 +78,7 @@ public class VideojuegoService {
     }
 
     @Cacheable("topNovedades")
+    @Transactional(readOnly = true)
     public List<VideojuegoResponseDTO> getTopNovedades() {
         // Simulamos que la base de datos es lenta y tarda 2 segundos
         try { Thread.sleep(2000); } catch (InterruptedException e) { }
