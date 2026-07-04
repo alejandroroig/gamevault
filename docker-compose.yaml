@@ -1,4 +1,14 @@
 services:
+  app:
+    image: mcr.microsoft.com/devcontainers/base:debian-12
+    volumes:
+      - .:/workspace:cached
+    command: sleep infinity
+    depends_on:
+      - postgres
+      - mongodb
+      - redis
+
   postgres:
     image: postgres:18-alpine
     environment:
@@ -22,7 +32,7 @@ services:
     ports:
       - "6379:6379"
 
-
 volumes:
   gv_pgdata:
   gv_mongodata:
+

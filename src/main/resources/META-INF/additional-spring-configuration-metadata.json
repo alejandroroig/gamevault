@@ -1,0 +1,10 @@
+{
+  "properties": [
+    {
+      "name": "gamevault.seed.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Activa o desactiva la carga inicial de datos desde datos_iniciales.json.",
+      "defaultValue": false
+    }
+  ]
+}

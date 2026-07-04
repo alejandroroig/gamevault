@@ -13,9 +13,9 @@ import com.aleroig.gamevault.reviews.dto.ReviewCreateDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
 
 import java.io.InputStream;
@@ -24,6 +24,7 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@ConditionalOnProperty(name = "gamevault.seed.enabled", havingValue = "true")
 public class DataInitializer implements CommandLineRunner {
     private final EstudioRepository estudioRepository;
     private final VideojuegoRepository videojuegoRepository;

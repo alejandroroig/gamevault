@@ -1,0 +1,22 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  datasource:
+    url: jdbc:postgresql://postgres:5432/gamevault_db
+    username: gamevault_user
+    password: password123
+    driver-class-name: org.postgresql.Driver
+
+  mongodb:
+    uri: mongodb://mongodb:27017/gamevault_db
+
+  data:
+    redis:
+      host: redis
+      port: 6379
+
+gamevault:
+  seed:
+    enabled: true
