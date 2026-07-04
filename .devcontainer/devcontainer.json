@@ -1,7 +1,11 @@
 {
   "name": "GameVault Dev Container",
-  "image": "mcr.microsoft.com/devcontainers/base:debian-12",
+  "dockerComposeFile": "../docker-compose.yaml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+
   "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {},
     "ghcr.io/devcontainers/features/java:1": {
       "version": "25",
       "jdkDistro": "tem",
@@ -10,7 +14,8 @@
     "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
     "ghcr.io/devcontainers/features/github-cli:1": {}
   },
+
   "remoteUser": "vscode",
-  "forwardPorts": [8080, 5444, 27018, 6379],
+  "forwardPorts": [8080],
   "postCreateCommand": "chmod +x mvnw && ./mvnw -v"
 }
