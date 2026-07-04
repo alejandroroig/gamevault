@@ -15,6 +15,7 @@ spring:
       hibernate:
         type:
           json_format_mapper: com.aleroig.gamevault.config.Jackson3HibernateMapper
+    open-in-view: false
 
 # Por defecto no se cargan datos iniciales. Cada perfil decide si los activa.
 gamevault:
