@@ -17,6 +17,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.json.JsonMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.io.InputStream;
 import java.util.List;
@@ -26,22 +27,26 @@ import java.util.List;
 @RequiredArgsConstructor
 @ConditionalOnProperty(name = "gamevault.seed.enabled", havingValue = "true")
 public class DataInitializer implements CommandLineRunner {
-    private final EstudioRepository estudioRepository;
-    private final VideojuegoRepository videojuegoRepository;
+    // private final EstudioRepository estudioRepository;
+    // private final VideojuegoRepository videojuegoRepository;
     private final ReviewRepository reviewRepository;
 
     private final EstudioService estudioService;
     private final VideojuegoService videojuegoService;
     private final ReviewService reviewService;
 
+    private final JdbcTemplate jdbcTemplate;
+
     private record SeedData(List<EstudioDTO> estudios, List<VideojuegoCreateDTO> videojuegos, List<ReviewCreateDTO> reviews) {}
+
 
     @Override
     public void run(String... args) throws Exception {
         log.info("Limpiando bases de datos...");
         reviewRepository.deleteAll();
-        videojuegoRepository.deleteAll();
-        estudioRepository.deleteAll();
+        jdbcTemplate.execute("TRUNCATE TABLE videojuego, estudio RESTART IDENTITY CASCADE");
+        // videojuegoRepository.deleteAll();
+        // estudioRepository.deleteAll();
 
         log.info("Iniciando el sembrado de datos (Postgres + Mongo)...");
         JsonMapper mapper = JsonMapper.builder().findAndAddModules().build();
