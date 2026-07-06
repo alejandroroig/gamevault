@@ -1,6 +1,9 @@
 package com.aleroig.gamevault.catalogo;
 
 import org.junit.jupiter.api.Test;
+import com.aleroig.gamevault.catalogo.dto.VideojuegoFiltroDTO;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.cache.CacheManager;
@@ -9,7 +12,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.Mockito.verifyNoInteractions;
+import java.math.BigDecimal;
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -55,5 +64,33 @@ class VideojuegoControllerTest {
                 .andExpect(jsonPath("$.fields.estudioId").exists());
 
         verifyNoInteractions(videojuegoService);
+    }
+
+    @Test
+    void getAll_DebePasarFiltrosAlServicio() throws Exception {
+        when(videojuegoService.findAllPaginated(
+                any(VideojuegoFiltroDTO.class),
+                any(Pageable.class)
+        )).thenReturn(new PageImpl<>(List.of()));
+
+        mockMvc.perform(get("/api/videojuegos")
+                        .param("titulo", "hollow")
+                        .param("estudioId", "1")
+                        .param("precioMin", "10")
+                        .param("precioMax", "30")
+                        .param("page", "0")
+                        .param("size", "5"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").isArray());
+
+        verify(videojuegoService).findAllPaginated(
+                argThat(filtro ->
+                        filtro.titulo().equals("hollow")
+                                && filtro.estudioId().equals(1L)
+                                && filtro.precioMin().compareTo(new BigDecimal("10")) == 0
+                                && filtro.precioMax().compareTo(new BigDecimal("30")) == 0
+                ),
+                any(Pageable.class)
+        );
     }
 }

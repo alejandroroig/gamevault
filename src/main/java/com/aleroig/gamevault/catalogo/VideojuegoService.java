@@ -3,12 +3,14 @@ package com.aleroig.gamevault.catalogo;
 import com.aleroig.gamevault.catalogo.dto.EstudioDTO;
 import com.aleroig.gamevault.catalogo.dto.VideojuegoCreateDTO;
 import com.aleroig.gamevault.catalogo.dto.VideojuegoResponseDTO;
+import com.aleroig.gamevault.catalogo.dto.VideojuegoFiltroDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -31,9 +33,14 @@ public class VideojuegoService {
     }
 
     @Transactional(readOnly = true)
-    public Page<VideojuegoResponseDTO> findAllPaginated(Pageable pageable) {
-        // El repositorio ya sabe cómo paginar si le pasamos el objeto pageable
-        return videojuegoRepository.findAll(pageable)
+    public Page<VideojuegoResponseDTO> findAllPaginated(VideojuegoFiltroDTO filtro, Pageable pageable) {
+        Specification<Videojuego> spec = Specification
+                .where(VideojuegoSpecifications.tituloContiene(filtro.titulo()))
+                .and(VideojuegoSpecifications.precioMayorOIgualA(filtro.precioMin()))
+                .and(VideojuegoSpecifications.precioMenorOIgualA(filtro.precioMax()))
+                .and(VideojuegoSpecifications.perteneceAlEstudio(filtro.estudioId()));
+
+        return videojuegoRepository.findAll(spec, pageable)
                 .map(this::mapToDTO);
     }
 
@@ -60,6 +67,7 @@ public class VideojuegoService {
         return mapToDTO(saved);
     }
 
+    @Transactional
     public VideojuegoResponseDTO update(Long id, VideojuegoCreateDTO dto) {
         Videojuego v = videojuegoRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Videojuego no encontrado"));
