@@ -2,6 +2,7 @@ package com.aleroig.gamevault.catalogo;
 
 import com.aleroig.gamevault.catalogo.dto.VideojuegoCreateDTO;
 import com.aleroig.gamevault.catalogo.dto.VideojuegoResponseDTO;
+import com.aleroig.gamevault.catalogo.dto.VideojuegoFiltroDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,8 +21,11 @@ public class VideojuegoController {
     private final VideojuegoService videojuegoService;
 
     @GetMapping
-    public ResponseEntity<Page<VideojuegoResponseDTO>> getAll(@PageableDefault(size = 5) Pageable pageable) {
-        return ResponseEntity.ok(videojuegoService.findAllPaginated(pageable));
+    public ResponseEntity<Page<VideojuegoResponseDTO>> getAll(
+            @ModelAttribute VideojuegoFiltroDTO filtro,
+            @PageableDefault(size = 5) Pageable pageable
+    ) {
+        return ResponseEntity.ok(videojuegoService.findAllPaginated(filtro, pageable));
     }
 
     @GetMapping("/top")
