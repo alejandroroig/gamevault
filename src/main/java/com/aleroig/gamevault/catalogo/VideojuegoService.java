@@ -1,5 +1,6 @@
 package com.aleroig.gamevault.catalogo;
 
+import com.aleroig.gamevault.actividad.ActividadService;
 import com.aleroig.gamevault.catalogo.dto.EstudioDTO;
 import com.aleroig.gamevault.catalogo.dto.VideojuegoCreateDTO;
 import com.aleroig.gamevault.catalogo.dto.VideojuegoResponseDTO;
@@ -26,6 +27,7 @@ public class VideojuegoService {
     private final VideojuegoRepository videojuegoRepository;
     private final EstudioRepository estudioRepository;
     private final ReviewService reviewService;
+    private final ActividadService actividadService;
 
     @Transactional(readOnly = true)
     public List<VideojuegoResponseDTO> findAll() {
@@ -69,6 +71,7 @@ public class VideojuegoService {
         v.setDetallesPlataforma(dto.detallesPlataforma()); // Guardamos el JSONB
 
         Videojuego saved = videojuegoRepository.save(v);
+        actividadService.registrarVideojuegoCreado(saved.getId(), saved.getTitulo());
         return mapToDTO(saved);
     }
 
@@ -88,6 +91,7 @@ public class VideojuegoService {
         v.setDetallesPlataforma(dto.detallesPlataforma()); // Actualizamos el JSONB
 
         Videojuego saved = videojuegoRepository.save(v);
+        actividadService.registrarVideojuegoActualizado(saved.getId(), saved.getTitulo());
         return mapToDTO(saved);
     }
 
@@ -114,6 +118,7 @@ public class VideojuegoService {
 
         reviewService.deleteByVideojuegoId(id);
         videojuegoRepository.deleteById(id);
+        actividadService.registrarVideojuegoEliminado(id);
     }
 
     // Mapeo manual

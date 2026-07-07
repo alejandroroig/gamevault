@@ -1,5 +1,7 @@
 package com.aleroig.gamevault.config;
 
+import com.aleroig.gamevault.actividad.Actividad;
+import com.aleroig.gamevault.actividad.ActividadRepository;
 import com.aleroig.gamevault.catalogo.Estudio;
 import com.aleroig.gamevault.catalogo.EstudioRepository;
 import com.aleroig.gamevault.catalogo.Videojuego;
@@ -13,14 +15,16 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @Configuration
 @EntityScan(basePackageClasses = {
         Estudio.class,
-        Videojuego.class
+        Videojuego.class,
+        Actividad.class
 })
 @EnableJpaRepositories(basePackageClasses = {
         EstudioRepository.class,
         VideojuegoRepository.class
 })
 @EnableMongoRepositories(basePackageClasses = {
-        ReviewRepository.class
+        ReviewRepository.class,
+        ActividadRepository.class
 })
 public class PersistenceConfig {
 }
