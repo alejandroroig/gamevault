@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/actividad")
+@RequestMapping("/api/v1/actividad")
 @RequiredArgsConstructor
 public class ActividadController {
 

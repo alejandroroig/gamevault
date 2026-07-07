@@ -40,7 +40,7 @@ class VideojuegoReviewControllerTest {
 
         when(reviewService.findByVideojuegoId(29L)).thenReturn(reviews);
 
-        mockMvc.perform(get("/api/videojuegos/29/reviews"))
+        mockMvc.perform(get("/api/v1/videojuegos/29/reviews"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value("abc123"))
                 .andExpect(jsonPath("$[0].videojuegoId").value(29))
@@ -56,7 +56,7 @@ class VideojuegoReviewControllerTest {
 
         when(reviewService.getResumenByVideojuegoId(29L)).thenReturn(resumen);
 
-        mockMvc.perform(get("/api/videojuegos/29/reviews/resumen"))
+        mockMvc.perform(get("/api/v1/videojuegos/29/reviews/resumen"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.videojuegoId").value(29))
                 .andExpect(jsonPath("$.totalReviews").value(2))
