@@ -1,6 +1,7 @@
 package com.aleroig.gamevault.reviews;
 
 import com.aleroig.gamevault.reviews.dto.ReviewResponseDTO;
+import com.aleroig.gamevault.reviews.dto.ReviewResumenDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -47,5 +48,18 @@ class VideojuegoReviewControllerTest {
                 .andExpect(jsonPath("$[0].puntuacion").value(10))
                 .andExpect(jsonPath("$[0].comentario").value("Obra maestra absoluta."))
                 .andExpect(jsonPath("$[1].autor").value("NoobMaster"));
+    }
+
+    @Test
+    void getResumenByVideojuegoId_DebeDevolverResumen_CuandoElVideojuegoExiste() throws Exception {
+        ReviewResumenDTO resumen = new ReviewResumenDTO(29L, 2, 9.5);
+
+        when(reviewService.getResumenByVideojuegoId(29L)).thenReturn(resumen);
+
+        mockMvc.perform(get("/api/videojuegos/29/reviews/resumen"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.videojuegoId").value(29))
+                .andExpect(jsonPath("$.totalReviews").value(2))
+                .andExpect(jsonPath("$.puntuacionMedia").value(9.5));
     }
 }
