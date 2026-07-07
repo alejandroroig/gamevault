@@ -1,6 +1,5 @@
 package com.aleroig.gamevault.actividad;
 
-import com.aleroig.gamevault.actividad.mensajeria.ActividadEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +12,12 @@ public class ActividadService {
 
     private final ActividadRepository actividadRepository;
 
-    public void registrar(ActividadEvent event) {
+    public void registrar(String tipo, String entidad, String entidadId, String descripcion) {
         Actividad actividad = new Actividad();
-        actividad.setTipo(event.tipo());
-        actividad.setEntidad(event.entidad());
-        actividad.setEntidadId(event.entidadId());
-        actividad.setDescripcion(event.descripcion());
+        actividad.setTipo(tipo);
+        actividad.setEntidad(entidad);
+        actividad.setEntidadId(entidadId);
+        actividad.setDescripcion(descripcion);
         actividad.setFecha(LocalDateTime.now());
 
         actividadRepository.save(actividad);

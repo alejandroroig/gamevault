@@ -1,11 +1,10 @@
 package com.aleroig.gamevault.catalogo;
 
-import com.aleroig.gamevault.actividad.mensajeria.ActividadEventPublisher;
 import com.aleroig.gamevault.catalogo.dto.EstudioDTO;
 import com.aleroig.gamevault.catalogo.dto.VideojuegoCreateDTO;
 import com.aleroig.gamevault.catalogo.dto.VideojuegoResponseDTO;
 import com.aleroig.gamevault.catalogo.dto.VideojuegoFiltroDTO;
-import com.aleroig.gamevault.reviews.ReviewService;
+import com.aleroig.gamevault.catalogo.mensajeria.VideojuegoEventPublisher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -26,8 +25,7 @@ import java.util.List;
 public class VideojuegoService {
     private final VideojuegoRepository videojuegoRepository;
     private final EstudioRepository estudioRepository;
-    private final ReviewService reviewService;
-    private final ActividadEventPublisher actividadEventPublisher;
+    private final VideojuegoEventPublisher videojuegoEventPublisher;
 
     @Transactional(readOnly = true)
     public List<VideojuegoResponseDTO> findAll() {
@@ -71,7 +69,7 @@ public class VideojuegoService {
         v.setDetallesPlataforma(dto.detallesPlataforma()); // Guardamos el JSONB
 
         Videojuego saved = videojuegoRepository.save(v);
-        actividadEventPublisher.publicarVideojuegoCreado(saved.getId(), saved.getTitulo());
+        videojuegoEventPublisher.publicarVideojuegoCreado(saved.getId(), saved.getTitulo());
         return mapToDTO(saved);
     }
 
@@ -91,7 +89,7 @@ public class VideojuegoService {
         v.setDetallesPlataforma(dto.detallesPlataforma()); // Actualizamos el JSONB
 
         Videojuego saved = videojuegoRepository.save(v);
-        actividadEventPublisher.publicarVideojuegoActualizado(saved.getId(), saved.getTitulo());
+        videojuegoEventPublisher.publicarVideojuegoActualizado(saved.getId(), saved.getTitulo());
         return mapToDTO(saved);
     }
 
@@ -112,13 +110,11 @@ public class VideojuegoService {
     @CacheEvict(value = "topNovedades", allEntries = true)
     @Transactional
     public void delete(Long id) {
-        if (!videojuegoRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Videojuego no encontrado");
-        }
+        Videojuego videojuego = videojuegoRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Videojuego no encontrado"));
 
-        reviewService.deleteByVideojuegoId(id);
-        videojuegoRepository.deleteById(id);
-        actividadEventPublisher.publicarVideojuegoEliminado(id);
+        videojuegoRepository.delete(videojuego);
+        videojuegoEventPublisher.publicarVideojuegoEliminado(videojuego.getId(), videojuego.getTitulo());
     }
 
     // Mapeo manual
