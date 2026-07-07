@@ -47,4 +47,10 @@ public class VideojuegoController {
     public ResponseEntity<VideojuegoResponseDTO> update(@PathVariable Long id, @Valid @RequestBody VideojuegoCreateDTO dto) {
         return ResponseEntity.ok(videojuegoService.update(id, dto));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        videojuegoService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }
