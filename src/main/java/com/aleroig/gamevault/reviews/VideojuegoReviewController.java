@@ -3,6 +3,7 @@ package com.aleroig.gamevault.reviews;
 import com.aleroig.gamevault.reviews.dto.ReviewCreateDTO;
 import com.aleroig.gamevault.reviews.dto.ReviewRequestDTO;
 import com.aleroig.gamevault.reviews.dto.ReviewResponseDTO;
+import com.aleroig.gamevault.reviews.dto.ReviewResumenDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,5 +28,10 @@ public class VideojuegoReviewController {
     public ResponseEntity<ReviewResponseDTO> create(@PathVariable Long videojuegoId, @Valid @RequestBody ReviewRequestDTO dto) {
         ReviewCreateDTO createDTO = new ReviewCreateDTO(videojuegoId, dto.autor(), dto.puntuacion(), dto.comentario());
         return ResponseEntity.status(HttpStatus.CREATED).body(reviewService.create(createDTO));
+    }
+
+    @GetMapping("/resumen")
+    public ResponseEntity<ReviewResumenDTO> getResumenByVideojuegoId(@PathVariable Long videojuegoId) {
+        return ResponseEntity.ok(reviewService.getResumenByVideojuegoId(videojuegoId));
     }
 }

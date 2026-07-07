@@ -3,6 +3,7 @@ package com.aleroig.gamevault.reviews;
 import com.aleroig.gamevault.catalogo.VideojuegoRepository;
 import com.aleroig.gamevault.reviews.dto.ReviewCreateDTO;
 import com.aleroig.gamevault.reviews.dto.ReviewResponseDTO;
+import com.aleroig.gamevault.reviews.dto.ReviewResumenDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,23 @@ public class ReviewService {
 
         Review saved = reviewRepository.save(review);
         return mapToDTO(saved);
+    }
+
+    public ReviewResumenDTO getResumenByVideojuegoId(Long videojuegoId) {
+        if (!videojuegoRepository.existsById(videojuegoId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Videojuego no encontrado en el catálogo");
+        }
+
+        List<Review> reviews = reviewRepository.findByVideojuegoId(videojuegoId);
+
+        long totalReviews = reviews.size();
+
+        double puntuacionMedia = reviews.stream()
+                .mapToInt(Review::getPuntuacion)
+                .average()
+                .orElse(0.0);
+
+        return new ReviewResumenDTO(videojuegoId, totalReviews, puntuacionMedia);
     }
 
     // Metodo auxiliar de mapeo manual
