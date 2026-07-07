@@ -5,6 +5,7 @@ import com.aleroig.gamevault.catalogo.dto.VideojuegoCreateDTO;
 import com.aleroig.gamevault.catalogo.dto.VideojuegoResponseDTO;
 import com.aleroig.gamevault.catalogo.dto.VideojuegoFiltroDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -52,6 +53,7 @@ public class VideojuegoService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Videojuego no encontrado"));
     }
 
+    @CacheEvict(value = "topNovedades", allEntries = true)
     @Transactional
     public VideojuegoResponseDTO create(VideojuegoCreateDTO dto) {
         Estudio estudio = estudioRepository.findById(dto.estudioId())
@@ -68,6 +70,7 @@ public class VideojuegoService {
         return mapToDTO(saved);
     }
 
+    @CacheEvict(value = "topNovedades", allEntries = true)
     @Transactional
     public VideojuegoResponseDTO update(Long id, VideojuegoCreateDTO dto) {
         Videojuego v = videojuegoRepository.findById(id)
