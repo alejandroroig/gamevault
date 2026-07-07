@@ -18,8 +18,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -92,5 +91,13 @@ class VideojuegoControllerTest {
                 ),
                 any(Pageable.class)
         );
+    }
+
+    @Test
+    void delete_DebeDevolver204_CuandoSeEliminaVideojuego() throws Exception {
+        mockMvc.perform(delete("/api/videojuegos/1"))
+                .andExpect(status().isNoContent());
+
+        verify(videojuegoService).delete(1L);
     }
 }

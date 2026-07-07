@@ -64,6 +64,10 @@ public class ReviewService {
         return new ReviewResumenDTO(videojuegoId, totalReviews, puntuacionMedia);
     }
 
+    public long deleteByVideojuegoId(Long videojuegoId) {
+        return reviewRepository.deleteByVideojuegoId(videojuegoId);
+    }
+
     // Metodo auxiliar de mapeo manual
     private ReviewResponseDTO mapToDTO(Review r) {
         return new ReviewResponseDTO(r.getId(), r.getVideojuegoId(), r.getAutor(), r.getPuntuacion(), r.getComentario());

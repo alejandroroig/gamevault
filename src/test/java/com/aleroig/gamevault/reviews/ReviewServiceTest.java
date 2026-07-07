@@ -14,6 +14,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class) // Habilita Mockito en JUnit 5
@@ -80,5 +81,15 @@ public class ReviewServiceTest {
         assertEquals(1L, resumen.videojuegoId());
         assertEquals(0, resumen.totalReviews());
         assertEquals(0.0, resumen.puntuacionMedia(), 0.001);
+    }
+
+    @Test
+    void deleteByVideojuegoId_DebeEliminarReviewsAsociadas() {
+        when(reviewRepository.deleteByVideojuegoId(1L)).thenReturn(2L);
+
+        long eliminadas = reviewService.deleteByVideojuegoId(1L);
+
+        assertEquals(2L, eliminadas);
+        verify(reviewRepository).deleteByVideojuegoId(1L);
     }
 }

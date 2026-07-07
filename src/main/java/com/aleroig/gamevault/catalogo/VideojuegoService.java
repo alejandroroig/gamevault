@@ -4,6 +4,7 @@ import com.aleroig.gamevault.catalogo.dto.EstudioDTO;
 import com.aleroig.gamevault.catalogo.dto.VideojuegoCreateDTO;
 import com.aleroig.gamevault.catalogo.dto.VideojuegoResponseDTO;
 import com.aleroig.gamevault.catalogo.dto.VideojuegoFiltroDTO;
+import com.aleroig.gamevault.reviews.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -24,6 +25,7 @@ import java.util.List;
 public class VideojuegoService {
     private final VideojuegoRepository videojuegoRepository;
     private final EstudioRepository estudioRepository;
+    private final ReviewService reviewService;
 
     @Transactional(readOnly = true)
     public List<VideojuegoResponseDTO> findAll() {
@@ -103,6 +105,16 @@ public class VideojuegoService {
                 .toList();
     }
 
+    @CacheEvict(value = "topNovedades", allEntries = true)
+    @Transactional
+    public void delete(Long id) {
+        if (!videojuegoRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Videojuego no encontrado");
+        }
+
+        reviewService.deleteByVideojuegoId(id);
+        videojuegoRepository.deleteById(id);
+    }
 
     // Mapeo manual
     private VideojuegoResponseDTO mapToDTO(Videojuego v) {
