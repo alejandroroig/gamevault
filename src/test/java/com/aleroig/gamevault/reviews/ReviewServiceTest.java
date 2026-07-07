@@ -1,6 +1,6 @@
 package com.aleroig.gamevault.reviews;
 
-import com.aleroig.gamevault.catalogo.VideojuegoRepository;
+import com.aleroig.gamevault.catalogo.api.CatalogoConsultaService;
 import com.aleroig.gamevault.reviews.dto.ReviewCreateDTO;
 import com.aleroig.gamevault.reviews.dto.ReviewResumenDTO;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ public class ReviewServiceTest {
     private ReviewRepository reviewRepository; // Base de datos simulada
 
     @Mock
-    private VideojuegoRepository videojuegoRepository; // Base de datos simulada
+    private CatalogoConsultaService catalogoConsultaService; // Base de datos simulada
 
     @InjectMocks
     private ReviewService reviewService; // El servicio REAL que vamos a probar
@@ -35,7 +35,7 @@ public class ReviewServiceTest {
         ReviewCreateDTO dto = new ReviewCreateDTO(99L, "Gamer", 10, "Genial");
 
         // Entrenamos al mock: "Si te preguntan por el ID 99, di que NO existe"
-        when(videojuegoRepository.existsById(99L)).thenReturn(false);
+        when(catalogoConsultaService.existeVideojuego(99L)).thenReturn(false);
 
         // 2. Act & Assert (Ejecutar y Comprobar a la vez)
         // Verificamos que al llamar a create() salte nuestra ResponseStatusException
@@ -61,7 +61,7 @@ public class ReviewServiceTest {
         review2.setPuntuacion(9);
         review2.setComentario("Difícil pero justo.");
 
-        when(videojuegoRepository.existsById(1L)).thenReturn(true);
+        when(catalogoConsultaService.existeVideojuego(1L)).thenReturn(true);
         when(reviewRepository.findByVideojuegoId(1L)).thenReturn(List.of(review1, review2));
 
         ReviewResumenDTO resumen = reviewService.getResumenByVideojuegoId(1L);
@@ -73,7 +73,7 @@ public class ReviewServiceTest {
 
     @Test
     void getResumenByVideojuegoId_DebeDevolverMediaCero_CuandoNoHayReviews() {
-        when(videojuegoRepository.existsById(1L)).thenReturn(true);
+        when(catalogoConsultaService.existeVideojuego(1L)).thenReturn(true);
         when(reviewRepository.findByVideojuegoId(1L)).thenReturn(List .of());
 
         ReviewResumenDTO resumen = reviewService.getResumenByVideojuegoId(1L);
