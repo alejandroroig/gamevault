@@ -6,6 +6,7 @@ public record VideojuegoFiltroDTO(
         String titulo,
         BigDecimal precioMin,
         BigDecimal precioMax,
-        Long estudioId
+        Long estudioId,
+        String plataforma
 ) {
 }

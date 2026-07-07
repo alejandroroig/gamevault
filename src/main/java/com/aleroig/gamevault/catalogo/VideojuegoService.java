@@ -38,7 +38,8 @@ public class VideojuegoService {
                 .where(VideojuegoSpecifications.tituloContiene(filtro.titulo()))
                 .and(VideojuegoSpecifications.precioMayorOIgualA(filtro.precioMin()))
                 .and(VideojuegoSpecifications.precioMenorOIgualA(filtro.precioMax()))
-                .and(VideojuegoSpecifications.perteneceAlEstudio(filtro.estudioId()));
+                .and(VideojuegoSpecifications.perteneceAlEstudio(filtro.estudioId()))
+                .and(VideojuegoSpecifications.disponibleEnPlataforma(filtro.plataforma()));
 
         return videojuegoRepository.findAll(spec, pageable)
                 .map(this::mapToDTO);
