@@ -1,6 +1,6 @@
 package com.aleroig.gamevault.catalogo;
 
-import com.aleroig.gamevault.actividad.ActividadService;
+import com.aleroig.gamevault.actividad.mensajeria.ActividadEventPublisher;
 import com.aleroig.gamevault.reviews.ReviewService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,7 +26,7 @@ class VideojuegoServiceTest {
     private ReviewService reviewService;
 
     @Mock
-    private ActividadService actividadService;
+    private ActividadEventPublisher actividadEventPublisher;
 
     @InjectMocks
     private VideojuegoService videojuegoService;
@@ -39,7 +39,7 @@ class VideojuegoServiceTest {
 
         verify(reviewService).deleteByVideojuegoId(1L);
         verify(videojuegoRepository).deleteById(1L);
-        verify(actividadService).registrarVideojuegoEliminado(1L);
+        verify(actividadEventPublisher).publicarVideojuegoEliminado(1L);
     }
 
     @Test
@@ -54,6 +54,6 @@ class VideojuegoServiceTest {
         assertEquals(404, exception.getStatusCode().value());
         verifyNoInteractions(reviewService);
         verify(videojuegoRepository, never()).deleteById(anyLong());
-        verifyNoInteractions(actividadService);
+        verifyNoInteractions(actividadEventPublisher);
     }
 }

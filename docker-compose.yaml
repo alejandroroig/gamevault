@@ -8,6 +8,7 @@ services:
       - postgres
       - mongodb
       - redis
+      - rabbitmq
 
   postgres:
     image: postgres:18-alpine
@@ -32,7 +33,16 @@ services:
     ports:
       - "6379:6379"
 
+  rabbitmq:
+    image: rabbitmq:4-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - gv_rabbitmqdata:/var/lib/rabbitmq
+
 volumes:
   gv_pgdata:
   gv_mongodata:
+  gv_rabbitmqdata:
 
