@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/videojuegos/{videojuegoId}/reviews")
+@RequestMapping("/api/v1/videojuegos/{videojuegoId}/reviews")
 @RequiredArgsConstructor
 public class VideojuegoReviewController {
 

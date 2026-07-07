@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/videojuegos")
+@RequestMapping("/api/v1/videojuegos")
 @RequiredArgsConstructor
 public class VideojuegoController {
     private final VideojuegoService videojuegoService;

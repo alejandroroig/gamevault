@@ -38,7 +38,7 @@ public class EstudioControllerTest {
 
         // 2 & 3. Act & Assert (Llamada HTTP y validaciones)
         // Fíjate cómo validamos NUESTROS datos (el DTO), no los del framework
-        mockMvc.perform(get("/api/estudios"))
+        mockMvc.perform(get("/api/v1/estudios"))
                 .andExpect(status().isOk()) // Esperamos HTTP 200
                 .andExpect(content().contentType("application/json")) // Formato JSON
                 .andExpect(jsonPath("$[0].nombre").value("Nintendo")) // Validamos nuestro contrato
