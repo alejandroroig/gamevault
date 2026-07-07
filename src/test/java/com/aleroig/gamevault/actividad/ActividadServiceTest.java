@@ -1,6 +1,5 @@
 package com.aleroig.gamevault.actividad;
 
-import com.aleroig.gamevault.actividad.mensajeria.ActividadEvent;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatcher;
@@ -21,15 +20,13 @@ class ActividadServiceTest {
     private ActividadService actividadService;
 
     @Test
-    void registrarVideojuegoEliminado_DebeGuardarActividad() {
-        ActividadEvent event = new ActividadEvent(
+    void registrar_DebeGuardarActividad() {
+        actividadService.registrar(
                 "VIDEOJUEGO_ELIMINADO",
                 "Videojuego",
                 "1",
-                "Se ha eliminado el videojuego con id 1"
+                "Se ha eliminado el videojuego Hollow Knight con id 1"
         );
-
-        actividadService.registrar(event);
 
         verify(actividadRepository).save(argThat(esActividadEliminacionVideojuego()));
     }

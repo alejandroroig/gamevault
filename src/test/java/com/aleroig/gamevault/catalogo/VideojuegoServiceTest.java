@@ -1,13 +1,14 @@
 package com.aleroig.gamevault.catalogo;
 
-import com.aleroig.gamevault.actividad.mensajeria.ActividadEventPublisher;
-import com.aleroig.gamevault.reviews.ReviewService;
+import com.aleroig.gamevault.catalogo.mensajeria.VideojuegoEventPublisher;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -23,28 +24,28 @@ class VideojuegoServiceTest {
     private EstudioRepository estudioRepository;
 
     @Mock
-    private ReviewService reviewService;
-
-    @Mock
-    private ActividadEventPublisher actividadEventPublisher;
+    private VideojuegoEventPublisher videojuegoEventPublisher;
 
     @InjectMocks
     private VideojuegoService videojuegoService;
 
     @Test
-    void delete_DebeBorrarReviewsYVideojuego_CuandoExiste() {
-        when(videojuegoRepository.existsById(1L)).thenReturn(true);
+    void delete_DebeBorrarVideojuegoYPublicarEvento_CuandoExiste() {
+        Videojuego videojuego = new Videojuego();
+        videojuego.setId(1L);
+        videojuego.setTitulo("Hollow Knight");
+
+        when(videojuegoRepository.findById(1L)).thenReturn(Optional.of(videojuego));
 
         videojuegoService.delete(1L);
 
-        verify(reviewService).deleteByVideojuegoId(1L);
-        verify(videojuegoRepository).deleteById(1L);
-        verify(actividadEventPublisher).publicarVideojuegoEliminado(1L);
+        verify(videojuegoRepository).delete(videojuego);
+        verify(videojuegoEventPublisher).publicarVideojuegoEliminado(1L, "Hollow Knight");
     }
 
     @Test
     void delete_DebeLanzar404_CuandoVideojuegoNoExiste() {
-        when(videojuegoRepository.existsById(99L)).thenReturn(false);
+        when(videojuegoRepository.findById(99L)).thenReturn(Optional.empty());
 
         ResponseStatusException exception = assertThrows(
                 ResponseStatusException.class,
@@ -52,8 +53,7 @@ class VideojuegoServiceTest {
         );
 
         assertEquals(404, exception.getStatusCode().value());
-        verifyNoInteractions(reviewService);
-        verify(videojuegoRepository, never()).deleteById(anyLong());
-        verifyNoInteractions(actividadEventPublisher);
+        verify(videojuegoRepository, never()).delete(any(Videojuego.class));
+        verifyNoInteractions(videojuegoEventPublisher);
     }
 }
