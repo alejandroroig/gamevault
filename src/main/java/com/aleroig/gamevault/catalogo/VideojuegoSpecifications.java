@@ -46,4 +46,20 @@ public final class VideojuegoSpecifications {
         return (root, query, criteriaBuilder) ->
                 criteriaBuilder.equal(root.get("estudio").get("id"), estudioId);
     }
+
+    public static Specification<Videojuego> disponibleEnPlataforma(String plataforma) {
+        if (plataforma == null || plataforma.isBlank()) {
+            return Specification.unrestricted();
+        }
+
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.isTrue(
+                        criteriaBuilder.function(
+                                "jsonb_exists",
+                                Boolean.class,
+                                root.get("detallesPlataforma"),
+                                criteriaBuilder.literal(plataforma.toLowerCase())
+                        )
+                );
+    }
 }
