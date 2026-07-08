@@ -24,6 +24,37 @@ La rama estable del proyecto es master.
 
 El punto de partida del laboratorio está marcado con el tag `v0.0-base`.
 
+## Arquitectura y seguridad
+
+GameVault es un monolito modular construido con Spring Boot.
+
+Actualmente incluye:
+
+- catálogo de videojuegos y estudios con PostgreSQL;
+- reviews almacenadas en MongoDB;
+- caché con Redis;
+- eventos de dominio con RabbitMQ;
+- registro de actividad;
+- seguridad con usuarios persistidos y JWT.
+
+La comunicación entre módulos se resuelve de dos formas:
+
+- consultas síncronas mediante APIs públicas internas;
+- reacciones asíncronas mediante eventos de dominio publicados en RabbitMQ.
+
+La API está versionada bajo `/api/v1`.
+
+La autenticación se realiza mediante:
+
+```http
+POST /api/v1/auth/login
+```
+
+Las rutas protegidas usan:
+```http
+Authorization: Bearer <token>
+```
+
 ## Documentación
 
 - [Flujo de trabajo con Git y GitHub](docs/00-flujo-git-github.md)
