@@ -21,3 +21,7 @@ spring:
 gamevault:
   seed:
     enabled: false
+
+  jwt:
+    secret: "dev-only-secret-key-for-gamevault-jwt-please-change"
+    expiration-minutes: 60
