@@ -3,6 +3,7 @@ package com.aleroig.gamevault.catalogo;
 import com.aleroig.gamevault.catalogo.dto.EstudioDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -16,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @WebMvcTest(EstudioController.class) // Solo levanta el entorno web para Estudios
+@AutoConfigureMockMvc(addFilters = false)
 public class EstudioControllerTest {
     @Autowired
     private MockMvc mockMvc; // Simula a Postman haciendo peticiones HTTP
