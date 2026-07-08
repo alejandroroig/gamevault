@@ -7,6 +7,8 @@ import com.aleroig.gamevault.catalogo.EstudioRepository;
 import com.aleroig.gamevault.catalogo.Videojuego;
 import com.aleroig.gamevault.catalogo.VideojuegoRepository;
 import com.aleroig.gamevault.reviews.ReviewRepository;
+import com.aleroig.gamevault.seguridad.Usuario;
+import com.aleroig.gamevault.seguridad.UsuarioRepository;
 import org.springframework.boot.persistence.autoconfigure.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -16,11 +18,13 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EntityScan(basePackageClasses = {
         Estudio.class,
         Videojuego.class,
-        Actividad.class
+        Usuario.class,
+        // Actividad.class
 })
 @EnableJpaRepositories(basePackageClasses = {
         EstudioRepository.class,
-        VideojuegoRepository.class
+        VideojuegoRepository.class,
+        UsuarioRepository.class
 })
 @EnableMongoRepositories(basePackageClasses = {
         ReviewRepository.class,

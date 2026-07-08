@@ -10,10 +10,14 @@ import com.aleroig.gamevault.catalogo.dto.VideojuegoResponseDTO;
 import com.aleroig.gamevault.reviews.ReviewRepository;
 import com.aleroig.gamevault.reviews.ReviewService;
 import com.aleroig.gamevault.reviews.dto.ReviewCreateDTO;
+import com.aleroig.gamevault.seguridad.RolUsuario;
+import com.aleroig.gamevault.seguridad.Usuario;
+import com.aleroig.gamevault.seguridad.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.json.JsonMapper;
@@ -27,8 +31,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @ConditionalOnProperty(name = "gamevault.seed.enabled", havingValue = "true")
 public class DataInitializer implements CommandLineRunner {
-    // private final EstudioRepository estudioRepository;
-    // private final VideojuegoRepository videojuegoRepository;
     private final ReviewRepository reviewRepository;
 
     private final EstudioService estudioService;
@@ -37,11 +39,15 @@ public class DataInitializer implements CommandLineRunner {
 
     private final JdbcTemplate jdbcTemplate;
 
+    private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
+
     private record SeedData(List<EstudioDTO> estudios, List<VideojuegoCreateDTO> videojuegos, List<ReviewCreateDTO> reviews) {}
 
 
     @Override
     public void run(String... args) throws Exception {
+        sembrarUsuarios();
         log.info("Limpiando bases de datos...");
         reviewRepository.deleteAll();
         jdbcTemplate.execute("TRUNCATE TABLE videojuego, estudio RESTART IDENTITY CASCADE");
@@ -87,5 +93,22 @@ public class DataInitializer implements CommandLineRunner {
         } catch (Exception e) {
             log.error("Error al inyectar datos: {}", e.getMessage(), e);
         }
+    }
+
+    private void sembrarUsuarios() {
+        crearOActualizarUsuario("admin", "admin123", RolUsuario.ADMIN);
+        crearOActualizarUsuario("user", "user123", RolUsuario.USER);
+    }
+
+    private void crearOActualizarUsuario(String username, String rawPassword, RolUsuario rol) {
+        Usuario usuario = usuarioRepository.findByUsername(username)
+                .orElseGet(Usuario::new);
+
+        usuario.setUsername(username);
+        usuario.setPassword(passwordEncoder.encode(rawPassword));
+        usuario.setRol(rol);
+        usuario.setActivo(true);
+
+        usuarioRepository.save(usuario);
     }
 }
