@@ -83,6 +83,14 @@ class GamevaultApiTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    void openApi_DebeEstarDisponibleSinAutenticacion() throws Exception {
+        mockMvc.perform(get("/v3/api-docs"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.openapi").exists())
+                .andExpect(jsonPath("$.info.title").value("GameVault API"));
+    }
+
     private String login(String username, String password) throws Exception {
         String response = mockMvc.perform(post("/api/v1/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -118,4 +126,6 @@ class GamevaultApiTest {
 
         return json.substring(tokenInicio, tokenFin);
     }
+
+
 }

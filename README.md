@@ -55,6 +55,26 @@ Las rutas protegidas usan:
 Authorization: Bearer <token>
 ```
 
+## Documentación de la API
+
+La API se documenta automáticamente con OpenAPI y Swagger UI.
+
+Con la aplicación arrancada, la interfaz está disponible en:
+
+```text
+http://localhost:8080/swagger-ui/index.html
+```
+La especificación OpenAPI en formato JSON está disponible en:
+
+http://localhost:8080/v3/api-docs
+
+Para probar endpoints protegidos desde Swagger UI, primero hay que obtener un token JWT en:
+
+```text
+POST /api/v1/auth/login
+```
+Después se puede usar el botón Authorize introduciendo el token en formato Bearer.
+
 ## Documentación
 
 - [Flujo de trabajo con Git y GitHub](docs/00-flujo-git-github.md)
