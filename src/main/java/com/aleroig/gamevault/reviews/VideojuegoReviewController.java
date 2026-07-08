@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -25,8 +26,18 @@ public class VideojuegoReviewController {
     }
 
     @PostMapping
-    public ResponseEntity<ReviewResponseDTO> create(@PathVariable Long videojuegoId, @Valid @RequestBody ReviewRequestDTO dto) {
-        ReviewCreateDTO createDTO = new ReviewCreateDTO(videojuegoId, dto.autor(), dto.puntuacion(), dto.comentario());
+    public ResponseEntity<ReviewResponseDTO> create(
+            @PathVariable Long videojuegoId,
+            @Valid @RequestBody ReviewRequestDTO dto,
+            Principal principal
+    ) {
+        ReviewCreateDTO createDTO = new ReviewCreateDTO(
+                videojuegoId,
+                principal.getName(),
+                dto.puntuacion(),
+                dto.comentario()
+        );
+
         return ResponseEntity.status(HttpStatus.CREATED).body(reviewService.create(createDTO));
     }
 

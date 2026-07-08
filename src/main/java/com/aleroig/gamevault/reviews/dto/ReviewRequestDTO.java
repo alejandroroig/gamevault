@@ -6,11 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record ReviewRequestDTO(
-        @NotBlank(message = "El autor no puede estar vacío")
-        String autor,
-
         @NotNull(message = "La puntuación es obligatoria")
-        @Min(value = 1, message = "La puntuación mínima es 1")
+        @Min(value = 0, message = "La puntuación mínima es 0")
         @Max(value = 10, message = "La puntuación máxima es 10")
         Integer puntuacion,
 
