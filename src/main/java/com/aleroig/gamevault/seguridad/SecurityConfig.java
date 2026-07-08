@@ -70,6 +70,9 @@ public class SecurityConfig {
                                 "/swagger-ui.html"
                         ).permitAll()
 
+                        // Generado con OpenApi
+                        .requestMatchers(HttpMethod.GET, "/api/v1/auth/me").authenticated()
+
                         // Cualquier otra ruta queda cerrada
                         .anyRequest().denyAll()
                 )

@@ -67,3 +67,26 @@ HTTP Basic con usuarios en memoria
 ```
 
 Esta evolución permite explicar progresivamente autenticación, autorización, roles, persistencia de usuarios y uso de tokens.
+
+
+## 7. Ejemplo API-first
+
+El proyecto incluye un ejemplo mínimo de desarrollo API-first con el endpoint:
+
+```text
+GET /api/v1/auth/me
+```
+En este caso, el contrato se define primero en:
+```text
+src/main/resources/openapi/auth-api.yaml
+```
+A partir de ese contrato, Maven genera una interfaz Java y un modelo de respuesta mediante OpenAPI Generator. La aplicación implementa después esa interfaz en un controlador propio.
+
+Esto permite comparar dos enfoques:
+```text
+Código primero:
+controladores Java → documentación OpenAPI generada
+
+API-first:
+contrato OpenAPI → código Java generado → implementación
+```
