@@ -63,6 +63,13 @@ public class SecurityConfig {
                         // Errores de Spring
                         .requestMatchers("/error").permitAll()
 
+                        // Swagger
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
+
                         // Cualquier otra ruta queda cerrada
                         .anyRequest().denyAll()
                 )
