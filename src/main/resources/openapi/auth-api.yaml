@@ -1,0 +1,50 @@
+openapi: 3.0.3
+
+info:
+  title: GameVault Auth API
+  version: v1
+  description: Contrato API-first para operaciones relacionadas con autenticación.
+
+paths:
+  /api/v1/auth/me:
+    get:
+      tags:
+        - auth
+      operationId: getCurrentUser
+      summary: Devuelve el usuario autenticado
+      description: Devuelve el nombre de usuario y los roles del usuario autenticado mediante JWT.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Usuario autenticado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthMeResponse'
+        '401':
+          description: No autenticado
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    AuthMeResponse:
+      type: object
+      required:
+        - username
+        - roles
+      properties:
+        username:
+          type: string
+          example: user
+        roles:
+          type: array
+          items:
+            type: string
+          example:
+            - USER
