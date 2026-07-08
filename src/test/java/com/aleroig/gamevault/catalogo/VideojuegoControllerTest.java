@@ -2,6 +2,7 @@ package com.aleroig.gamevault.catalogo;
 
 import org.junit.jupiter.api.Test;
 import com.aleroig.gamevault.catalogo.dto.VideojuegoFiltroDTO;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(VideojuegoController.class)
+@AutoConfigureMockMvc(addFilters = false)
 class VideojuegoControllerTest {
 
     @Autowired
