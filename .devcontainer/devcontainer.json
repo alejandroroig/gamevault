@@ -15,7 +15,19 @@
     "ghcr.io/devcontainers/features/github-cli:1": {}
   },
 
+  "containerEnv": {
+    "TESTCONTAINERS_HOST_OVERRIDE": "host.docker.internal"
+  },
+
   "remoteUser": "vscode",
   "forwardPorts": [8080],
-  "postCreateCommand": "chmod +x mvnw && ./mvnw -v"
+  "postCreateCommand": "chmod +x mvnw && ./mvnw -v",
+  "customizations": {
+    "jetbrains": {
+      "settings": {
+        "com.intellij:app:HttpConfigurable.use_proxy_pac": true,
+        "Git4Idea:app:Git-Application-Settings.myPathToGit": "C:\\Program Files\\Git\\bin\\git.exe"
+      }
+    }
+  }
 }

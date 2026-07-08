@@ -1,0 +1,20 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+
+  rabbitmq:
+    listener:
+      simple:
+        auto-startup: false
+      direct:
+        auto-startup: false
+
+gamevault:
+  seed:
+    enabled: true
+
+  jwt:
+    secret: "test-only-secret-key-for-gamevault-jwt-please-change"
+    expiration-minutes: 60
